@@ -1,0 +1,27 @@
+# Git
+.git/
+.gitignore
+
+# Entornos virtuales
+venv/
+env/
+ENV/
+
+# Base de datos local (se manejará con un volumen)
+db.sqlite3
+db.sqlite3-journal
+
+# Cache de Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Archivos de IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Variables de entorno
+.env
+.env.*

@@ -1,0 +1,74 @@
+{
+  "info": {
+    "name": "Dashboard API - Arte Ideas",
+    "description": "Colección completa de endpoints del Dashboard Analytics. Todos los endpoints requieren autenticación JWT.",
+    "version": "1.0.1",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {"key": "base_url", "value": "https://app.arteideas.pe", "type": "string"},
+    {"key": "access_token", "value": "", "type": "string"}
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [{"key": "token", "value": "{{access_token}}"}]
+  },
+  "item": [
+    {
+      "name": "Login",
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"email\": \"admin@arteideas.com\", \"password\": \"admin123\"}"
+        },
+        "url": "{{base_url}}/api/core/auth/login/"
+      }
+    },
+    {
+      "name": "Dashboard - Resumen Completo",
+      "request": {"method": "GET", "url": "{{base_url}}/api/analytics/dashboard/resumen/"}
+    },
+    {
+      "name": "Dashboard - Alertas Rápidas",
+      "request": {"method": "GET", "url": "{{base_url}}/api/analytics/dashboard/alertas-rapidas/"}
+    },
+    {
+      "name": "Dashboard - Estado Producción",
+      "request": {"method": "GET", "url": "{{base_url}}/api/analytics/dashboard/estado-produccion/"}
+    },
+    {
+      "name": "Dashboard - Estadísticas Clientes",
+      "request": {"method": "GET", "url": "{{base_url}}/api/analytics/dashboard/clientes-estadisticas/"}
+    },
+    {
+      "name": "Dashboard - Estadísticas Contratos",
+      "request": {"method": "GET", "url": "{{base_url}}/api/analytics/dashboard/contratos-estadisticas/"}
+    },
+    {
+      "name": "Dashboard - Productos Más Vendidos",
+      "request": {"method": "GET", "url": "{{base_url}}/api/analytics/dashboard/productos-mas-vendidos/"}
+    },
+    {
+      "name": "Dashboard - Pedidos Recientes",
+      "request": {"method": "GET", "url": "{{base_url}}/api/analytics/dashboard/pedidos-recientes/"}
+    },
+    {
+      "name": "Dashboard - Entregas Hoy",
+      "request": {"method": "GET", "url": "{{base_url}}/api/analytics/dashboard/entregas-programadas-hoy/"}
+    },
+    {
+      "name": "Alertas - Semana",
+      "request": {"method": "GET", "url": "{{base_url}}/api/analytics/dashboard/alertas/?filtro=semana"}
+    },
+    {
+      "name": "Alertas - Hoy",
+      "request": {"method": "GET", "url": "{{base_url}}/api/analytics/dashboard/alertas/?filtro=hoy"}
+    },
+    {
+      "name": "Alertas - Mes",
+      "request": {"method": "GET", "url": "{{base_url}}/api/analytics/dashboard/alertas/?filtro=mes"}
+    }
+  ]
+}

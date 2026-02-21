@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Contrato {{ contract.external_ref }} - {{ contract.title }}</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+            @bottom-center {
+                content: "Página " counter(page) " de " counter(pages);
+                font-size: 10px;
+                color: #666;
+            }
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            font-size: 12px;
+            line-height: 1.5;
+            color: #333;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #366092;
+            padding-bottom: 20px;
+        }
+        
+        .header h1 {
+            font-size: 24px;
+            color: #366092;
+            margin: 0;
+        }
+        
+        .header h2 {
+            font-size: 18px;
+            color: #666;
+            margin: 5px 0;
+        }
+        
+        .contract-info {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px 0;
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        
+        .contract-info .left,
+        .contract-info .right {
+            width: 48%;
+        }
+        
+        .info-row {
+            margin: 8px 0;
+        }
+        
+        .info-label {
+            font-weight: bold;
+            color: #366092;
+            display: inline-block;
+            width: 120px;
+        }
+        
+        .client-section {
+            margin: 25px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        
+        .client-section h3 {
+            color: #366092;
+            margin-top: 0;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+        
+        .financial-summary {
+            margin: 25px 0;
+            padding: 15px;
+            background-color: #e8f4f8;
+            border-radius: 5px;
+            border-left: 4px solid #366092;
+        }
+        
+        .financial-summary h3 {
+            color: #366092;
+            margin-top: 0;
+        }
+        
+        .financial-row {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+            padding: 5px 0;
+        }
+        
+        .financial-row.total {
+            font-weight: bold;
+            font-size: 14px;
+            border-top: 2px solid #366092;
+            padding-top: 10px;
+            margin-top: 15px;
+        }
+        
+        .clauses-section {
+            margin: 25px 0;
+        }
+        
+        .clauses-section h3 {
+            color: #366092;
+            border-bottom: 2px solid #366092;
+            padding-bottom: 10px;
+        }
+        
+        .clause {
+            margin: 15px 0;
+            padding: 10px;
+            border-left: 3px solid #366092;
+            background-color: #f9f9f9;
+        }
+        
+        .clause-title {
+            font-weight: bold;
+            color: #366092;
+            margin-bottom: 5px;
+        }
+        
+        .payments-section {
+            margin: 25px 0;
+        }
+        
+        .payments-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        
+        .payments-table th,
+        .payments-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        
+        .payments-table th {
+            background-color: #366092;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .payments-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 3px;
+            font-size: 11px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        
+        .status-borrador { background-color: #6c757d; color: white; }
+        .status-activo { background-color: #28a745; color: white; }
+        .status-completado { background-color: #007bff; color: white; }
+        .status-cancelado { background-color: #dc3545; color: white; }
+        
+        .footer {
+            margin-top: 50px;
+            text-align: center;
+            font-size: 10px;
+            color: #666;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+        }
+        
+        .signatures {
+            margin-top: 40px;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .signature-box {
+            width: 45%;
+            text-align: center;
+            border-top: 1px solid #333;
+            padding-top: 10px;
+            margin-top: 60px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>{{ tenant.business_name }}</h1>
+        <h2>CONTRATO DE SERVICIOS</h2>
+        <p>{{ tenant.business_address }}</p>
+        <p>Teléfono: {{ tenant.business_phone }} | Email: {{ tenant.business_email }}</p>
+        {% if tenant.business_ruc %}
+        <p>RUC: {{ tenant.business_ruc }}</p>
+        {% endif %}
+    </div>
+
+    <div class="contract-info">
+        <div class="left">
+            <div class="info-row">
+                <span class="info-label">N° Contrato:</span>
+                <strong>{{ contract.external_ref }}</strong>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Título:</span>
+                {{ contract.title }}
+            </div>
+            <div class="info-row">
+                <span class="info-label">Tipo Servicio:</span>
+                {{ contract.get_contract_type_display }}
+            </div>
+            <div class="info-row">
+                <span class="info-label">Estado:</span>
+                <span class="status-badge status-{{ contract.status }}">{{ contract.get_status_display }}</span>
+            </div>
+        </div>
+        <div class="right">
+            <div class="info-row">
+                <span class="info-label">Fecha Inicio:</span>
+                {{ contract.start_date|date:"d/m/Y" }}
+            </div>
+            {% if contract.end_date %}
+            <div class="info-row">
+                <span class="info-label">Fecha Fin:</span>
+                {{ contract.end_date|date:"d/m/Y" }}
+            </div>
+            {% endif %}
+            <div class="info-row">
+                <span class="info-label">Generado:</span>
+                {{ generated_at|date:"d/m/Y H:i" }}
+            </div>
+        </div>
+    </div>
+
+    <div class="client-section">
+        <h3>📋 Información del Cliente</h3>
+        <div class="info-row">
+            <span class="info-label">Nombre:</span>
+            <strong>{{ contract.client_name }}</strong>
+        </div>
+        {% if contract.client.email %}
+        <div class="info-row">
+            <span class="info-label">Email:</span>
+            {{ contract.client.email }}
+        </div>
+        {% endif %}
+        {% if contract.client.telefono %}
+        <div class="info-row">
+            <span class="info-label">Teléfono:</span>
+            {{ contract.client.telefono }}
+        </div>
+        {% endif %}
+        {% if contract.client.direccion %}
+        <div class="info-row">
+            <span class="info-label">Dirección:</span>
+            {{ contract.client.direccion }}
+        </div>
+        {% endif %}
+        {% if contract.client.dni %}
+        <div class="info-row">
+            <span class="info-label">DNI/RUC:</span>
+            {{ contract.client.dni }}
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="financial-summary">
+        <h3>💰 Resumen Financiero</h3>
+        <div class="financial-row">
+            <span>Monto Total del Contrato:</span>
+            <strong>S/ {{ contract.amount|floatformat:2 }}</strong>
+        </div>
+        <div class="financial-row">
+            <span>Total Pagado:</span>
+            <span>S/ {{ total_pagado|floatformat:2 }}</span>
+        </div>
+        <div class="financial-row">
+            <span>Saldo Pendiente:</span>
+            <span>S/ {{ saldo_pendiente|floatformat:2 }}</span>
+        </div>
+        <div class="financial-row">
+            <span>Porcentaje Adelanto:</span>
+            <span>{{ porcentaje_adelanto|floatformat:1 }}%</span>
+        </div>
+        <div class="financial-row total">
+            <span>Estado de Pago:</span>
+            <span>{% if saldo_pendiente == 0 %}✅ PAGADO COMPLETO{% else %}⏳ PENDIENTE{% endif %}</span>
+        </div>
+    </div>
+
+    {% if contract.details %}
+    <div class="client-section">
+        <h3>📝 Descripción del Servicio</h3>
+        <p>{{ contract.details|linebreaks }}</p>
+    </div>
+    {% endif %}
+
+    {% if clausulas %}
+    <div class="clauses-section">
+        <h3>📜 Cláusulas del Contrato</h3>
+        {% for clausula in clausulas %}
+        <div class="clause">
+            <div class="clause-title">
+                Cláusula {{ clausula.numero_clausula }}: {{ clausula.titulo }}
+            </div>
+            <div>{{ clausula.contenido|linebreaks }}</div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if pagos %}
+    <div class="payments-section">
+        <h3>💳 Historial de Pagos</h3>
+        <table class="payments-table">
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Monto</th>
+                    <th>Método</th>
+                    <th>N° Operación</th>
+                    <th>Registrado Por</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for pago in pagos %}
+                <tr>
+                    <td>{{ pago.fecha_pago|date:"d/m/Y" }}</td>
+                    <td>S/ {{ pago.monto|floatformat:2 }}</td>
+                    <td>{{ pago.get_metodo_pago_display }}</td>
+                    <td>{{ pago.numero_operacion|default:"-" }}</td>
+                    <td>{{ pago.registrado_por.get_full_name }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+
+    <div class="signatures">
+        <div class="signature-box">
+            <strong>{{ contract.client_name }}</strong><br>
+            <small>CLIENTE</small>
+        </div>
+        <div class="signature-box">
+            <strong>{{ tenant.business_name }}</strong><br>
+            <small>PROVEEDOR</small>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>Este documento fue generado automáticamente el {{ generated_at|date:"d/m/Y" }} a las {{ generated_at|date:"H:i" }}</p>
+        <p>{{ tenant.business_name }} - Todos los derechos reservados</p>
+    </div>
+</body>
+</html>
