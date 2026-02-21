@@ -3,18 +3,17 @@ services:
     build: ./Av1-Backend
     container_name: arteideas-backend
     ports:
-      - "127.0.0.1:9000:8000"
+      - "9000:8000"
     restart: always
+    env_file: .env
     depends_on:
       - db
     environment:
       - DB_ENGINE=django.db.backends.mysql
-      - DB_NAME=${MYSQL_DATABASE}
-      - DB_USER=${MYSQL_USER}
-      - DB_PASSWORD=${MYSQL_PASSWORD}
-      - DB_HOST=${DB_HOST}
-      - DB_PORT=${DB_PORT}
-      - DEBUG=False
+      - DB_HOST=db
+      - DB_PORT=3306
+      - ALLOWED_HOSTS=${ALLOWED_HOSTS}
+      - FRONTEND_URL=${FRONTEND_URL}
 
   frontend:
     build: ./Av1-Frontend
@@ -22,16 +21,13 @@ services:
     ports:
       - "3000:80"
     restart: always
+    env_file: ./Av1-Frontend/.env
 
   db:
     image: mysql:8.0
     container_name: arteideas-db
     restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    env_file: .env
     ports:
       - "3307:3306"
     volumes:

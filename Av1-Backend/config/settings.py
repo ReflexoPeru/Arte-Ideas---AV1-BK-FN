@@ -16,7 +16,7 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-fallback-chang
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.localhost', 'arteideas.marketingmedico.vip']
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
 
 DJANGO_APPS = [
     'django.contrib.admin',
@@ -140,11 +140,15 @@ SIMPLE_JWT = {
 # CORS Configuration
 CORS_ALLOW_ALL_ORIGINS = DEBUG
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
-    "http://localhost:5173",
-    "http://127.0.0.1:5173",
+    os.environ.get('FRONTEND_URL', 'http://localhost:3000'),
 ]
+if DEBUG:
+    CORS_ALLOWED_ORIGINS += [
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+    ]
 CORS_ALLOW_CREDENTIALS = True
 
 # Internationalization
